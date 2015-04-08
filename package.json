@@ -1,0 +1,27 @@
+{
+  "name": "object-interpolator",
+  "version": "1.0.0",
+  "description": "Nodejs interpolator",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Growmies/object-interpolator.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Growmies/object-interpolator/issues"
+  },
+  "homepage": "https://github.com/Growmies/object-interpolator",
+  "dependencies": {
+    "lodash": "^3.6.0",
+    "moment": "^2.10.0"
+  },
+  "devDependencies": {
+    "chai": "^2.2.0",
+    "mocha": "^2.2.4"
+  }
+}
