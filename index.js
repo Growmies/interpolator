@@ -35,7 +35,9 @@ function interpolateSpecialValues(obj) {
       var interpolator = _.find(specialInterpolators, function(interpolator) {
         return interpolator.matcher.test(objStr);
       });
-      objStr = interpolator.interpolate(objStr);  
+      if (interpolator) {
+        objStr = interpolator.interpolate(objStr);
+      }
     }
   }
   return JSON.parse(objStr);
