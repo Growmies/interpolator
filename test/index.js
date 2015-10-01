@@ -4,9 +4,9 @@ var assert       = require('chai').assert,
     _            = require('lodash'),
     interpolator = require('../');
 
-describe('Basic usage', function() {
+describe('Basic usage', function () {
 
-  it.only("should parse {{date('YYYY-MM-DD')}}", function() {
+  it("should parse {{date('YYYY-MM-DD')}}", function () {
 
     var obj = {
       a: 'test',
@@ -28,18 +28,16 @@ describe('Basic usage', function() {
 
     var newObj = interpolator.interpolateSpecialValues(obj);
 
-    console.log(newObj);
-
     assert(_.isEqual(newObj, testObj));
 
   });
 
-  it("should parse {{date('-/+10{interval}', 'YYYY-MM-DD HH:MM:SS')}}", function() {
+  it("should parse {{date('-/+10{interval}', 'YYYY-MM-DD HH:MM:SS')}}", function () {
 
     //'seconds' could make the test fail
 
-    _.each(['minutes', 'hours', 'days', 'weeks', 'months', 'years'], function(interval) {
-      _.each(['-', '+'], function(direction) {
+    _.each(['minutes', 'hours', 'days', 'weeks', 'months', 'years'], function (interval) {
+      _.each(['-', '+'], function (direction) {
 
         var obj = {
           a: 'test',
@@ -59,20 +57,36 @@ describe('Basic usage', function() {
 
       });
     });
-    
+
 
   });
 
-  it("should parse {{date('YYYY-MM-DD')}}", function() {
-
-    var obj = "Hello world, {)_0 {{date('-30days', 'YYYY-MM-DD')}} +-=}"
-
-    var testObj = "Hello world, {)_0 "+moment().subtract(30, 'days').format('YYYY-MM-DD')+" +-=}";
-
-    var newObj = interpolator.interpolateSpecialValues(obj);
-
+  it("should parse {{date('YYYY-MM-DD')}}", function () {
+    var obj     = "Hello world, {)_0 {{date('-30days', 'YYYY-MM-DD')}} +-=}";
+    var testObj = "Hello world, {)_0 " + moment().subtract(30, 'days').format('YYYY-MM-DD') + " +-=}";
+    var newObj  = interpolator.interpolateSpecialValues(obj);
     assert(_.isEqual(newObj, testObj));
+  });
 
+  it("should parse {{date('start of year', 'YYYY-MM-DD')}}", function () {
+    var obj     = "{{date('start of year', 'YYYY-MM-DD')}}";
+    var testObj = moment().startOf('year').format('YYYY-MM-DD');
+    var newObj  = interpolator.interpolateSpecialValues(obj);
+    assert(_.isEqual(newObj, testObj));
+  });
+
+  it("should parse {{date('start of week', 'YYYY-MM-DD')}}", function () {
+    var obj     = "{{date('start of week', 'YYYY-MM-DD')}}";
+    var testObj = moment().startOf('week').format('YYYY-MM-DD');
+    var newObj  = interpolator.interpolateSpecialValues(obj);
+    assert(_.isEqual(newObj, testObj));
+  });
+
+  it("should parse {{date('start of month', 'YYYY-MM-DD')}}", function () {
+    var obj     = "{{date('start of month', 'YYYY-MM-DD')}}";
+    var testObj = moment().startOf('month').format('YYYY-MM-DD');
+    var newObj  = interpolator.interpolateSpecialValues(obj);
+    assert(_.isEqual(newObj, testObj));
   });
 
 });
