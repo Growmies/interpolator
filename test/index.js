@@ -1,8 +1,8 @@
-var assert       = require('chai').assert,
-    mocha        = require('mocha'),
-    moment       = require('moment'),
-    _            = require('lodash'),
-    interpolator = require('../');
+var assert       = require('chai').assert;
+var mocha        = require('mocha');
+var moment       = require('moment');
+var _            = require('lodash');
+var interpolator = require('../');
 
 describe('Basic usage', function () {
 
@@ -87,6 +87,47 @@ describe('Basic usage', function () {
     var testObj = moment().startOf('month').format('YYYY-MM-DD');
     var newObj  = interpolator.interpolateSpecialValues(obj);
     assert(_.isEqual(newObj, testObj));
+  });
+
+  it("should parse two dates in the same string 'once' {{date('start of year', 'YYYY-MM-DD')}} -- {{date('start of month', 'YYYY-MM-DD')}}",
+    function () {
+      var obj     = "{{date('start of year', 'YYYY-MM-DD')}} -- {{date('start of month', 'YYYY-MM-DD')}}";
+      var testObj = moment().startOf('year').format('YYYY-MM-DD') + ' -- ' + moment().startOf('month').format('YYYY-MM-DD');
+      var newObj  = interpolator.interpolateSpecialValues(obj);
+      assert(_.isEqual(newObj, testObj));
+    });
+
+  it("should parse {{date('-1years', 'start of year', 'YYYY-MM-DD')}}", function () {
+    var obj     = "{{date('-1years', 'start of year', 'YYYY-MM-DD')}}";
+    var testObj = moment().subtract(1, 'year').startOf('year').format('YYYY-MM-DD');
+    var newObj  = interpolator.interpolateSpecialValues(obj);
+    assert(_.isEqual(newObj, testObj));
+  });
+
+  it("should parse {{date('-1years', '-1years', 'start of year', 'YYYY-MM-DD')}}", function () {
+    var obj     = "{{date('-1years', '-1years', 'start of year', 'YYYY-MM-DD')}}";
+    var testObj = moment().subtract(2, 'year').startOf('year').format('YYYY-MM-DD');
+    var newObj  = interpolator.interpolateSpecialValues(obj);
+    assert(_.isEqual(newObj, testObj));
+  });
+
+  it("should parse {{date('start of year', '-1years')}}", function () {
+    var obj     = "{{date('start of year', '-1years')}}";
+    var testObj = moment().startOf('year').subtract(1, 'year').format('YYYY-MM-DD');
+    var newObj  = interpolator.interpolateSpecialValues(obj);
+    assert(_.isEqual(newObj, testObj));
+  });
+
+  it("should return a regular string without changing it", function () {
+    var obj     = "2015-01-01";
+    var newObj  = interpolator.interpolateSpecialValues(obj);
+    assert(_.isEqual(newObj, obj));
+  });
+
+  it("should return an object without changing it if no interpolations are given", function () {
+    var obj     = {a:"2015-01-01", b:13, c:true, d:false};
+    var newObj  = interpolator.interpolateSpecialValues(obj);
+    assert(_.isEqual(newObj, obj));
   });
 
 });
