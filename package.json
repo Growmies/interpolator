@@ -1,6 +1,6 @@
 {
   "name": "object-interpolator",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Nodejs interpolator",
   "main": "index.js",
   "scripts": {
@@ -17,11 +17,11 @@
   },
   "homepage": "https://github.com/Growmies/object-interpolator",
   "dependencies": {
-    "lodash": "^3.6.0",
+    "lodash": "^4.5.1",
     "moment": "^2.10.0"
   },
   "devDependencies": {
-    "chai": "^2.2.0",
+    "chai": "^3.5.0",
     "mocha": "^2.2.4"
   }
 }
