@@ -40,3 +40,4 @@ You can + or - any # of (seconds|minutes|hours|days|weeks|months|years)
 You can start of (year|month|quarter|week|isoWeek|day|hour|minute|second)  
 You can now pass multiple date prompts together, like in example 'g'  
 If no format is given, it will default to YYYY-MM-DD  
+With really bad input, an Error will be thrown, otherwise garbage in - garbage out  

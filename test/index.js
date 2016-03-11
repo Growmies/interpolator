@@ -130,4 +130,17 @@ describe('Basic usage', function () {
     assert(_.isEqual(newObj, obj));
   });
 
+  it("should return an error with bad input 1", function () {
+    var obj     = "{{date('year,-1,GETDATE()')}}";
+    try {
+      var newObj = interpolator.interpolateSpecialValues(obj);
+    } catch (err) {
+
+      assert(_.isError(err));
+      return;
+    }
+    assert(false, 'we should not get here');
+
+  });
+
 });
