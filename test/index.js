@@ -143,4 +143,15 @@ describe('Basic usage', function () {
 
   });
 
+  it("should not throw and error if you pass it something that it can't work with. It should return what you gave it.", function () {
+    var obj      = null;
+    try {
+      var newObj = interpolator.interpolateSpecialValues(obj);
+      assert(_.isNull(newObj));
+    } catch (err) {
+      assert(false);
+      return;
+    }
+  });
+
 });

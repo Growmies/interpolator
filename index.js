@@ -32,6 +32,9 @@ function manipulateDate(date, prompt) {
 }
 
 function interpolateSpecialValues(obj) {
+  if (!obj) {
+    return obj;
+  }
   var objStr  = JSON.stringify(obj);
   var matches = objStr.match(/\{\{date\([^\}]+\)\}\}/g);
 
