@@ -1,12 +1,13 @@
-var assert       = require('chai').assert;
-var mocha        = require('mocha');
-var moment       = require('moment');
-var _            = require('lodash');
-var interpolator = require('../');
+'use strict'
+const assert       = require('chai').assert;
+const mocha        = require('mocha');
+const moment       = require('moment');
+const _            = require('lodash');
+const interpolator = require('../');
 
-describe('Basic usage', function () {
+describe('Basic usage', () => {
 
-  it("should parse {{date('YYYY-MM-DD')}}", function () {
+  it("should parse {{date('YYYY-MM-DD')}}", () => {
 
     var obj = {
       a: 'test',
@@ -32,17 +33,17 @@ describe('Basic usage', function () {
 
   });
 
-  it("should parse {{date('-/+10{interval}', 'YYYY-MM-DD HH:MM:SS')}}", function () {
+  it("should parse {{date('-/+10{interval}', 'YYYY-MM-DD HH:MM:SS')}}", () => {
 
     //'seconds' could make the test fail
 
-    _.each(['minutes', 'hours', 'days', 'weeks', 'months', 'years'], function (interval) {
-      _.each(['-', '+'], function (direction) {
+    _.each(['minutes', 'hours', 'days', 'weeks', 'months', 'years'], interval => {
+      _.each(['-', '+'], direction => {
 
         var obj = {
           a: 'test',
           b: 'test',
-          c: "{{date('" + direction + "1" + interval + "', 'YYYY-MM-DD HH:MM')}}"
+          c: `{{date('${direction}1${interval}', 'YYYY-MM-DD HH:MM')}}`
         };
 
         var testObj = {
@@ -61,28 +62,28 @@ describe('Basic usage', function () {
 
   });
 
-  it("should parse {{date('YYYY-MM-DD')}}", function () {
+  it("should parse {{date('YYYY-MM-DD')}}", () => {
     var obj     = "Hello world, {)_0 {{date('-30days', 'YYYY-MM-DD')}} +-=}";
     var testObj = "Hello world, {)_0 " + moment().subtract(30, 'days').format('YYYY-MM-DD') + " +-=}";
     var newObj  = interpolator.interpolateSpecialValues(obj);
     assert(_.isEqual(newObj, testObj));
   });
 
-  it("should parse {{date('start of year', 'YYYY-MM-DD')}}", function () {
+  it("should parse {{date('start of year', 'YYYY-MM-DD')}}", () => {
     var obj     = "{{date('start of year', 'YYYY-MM-DD')}}";
     var testObj = moment().startOf('year').format('YYYY-MM-DD');
     var newObj  = interpolator.interpolateSpecialValues(obj);
     assert(_.isEqual(newObj, testObj));
   });
 
-  it("should parse {{date('start of week', 'YYYY-MM-DD')}}", function () {
+  it("should parse {{date('start of week', 'YYYY-MM-DD')}}", () => {
     var obj     = "{{date('start of week', 'YYYY-MM-DD')}}";
     var testObj = moment().startOf('week').format('YYYY-MM-DD');
     var newObj  = interpolator.interpolateSpecialValues(obj);
     assert(_.isEqual(newObj, testObj));
   });
 
-  it("should parse {{date('start of month', 'YYYY-MM-DD')}}", function () {
+  it("should parse {{date('start of month', 'YYYY-MM-DD')}}", () => {
     var obj     = "{{date('start of month', 'YYYY-MM-DD')}}";
     var testObj = moment().startOf('month').format('YYYY-MM-DD');
     var newObj  = interpolator.interpolateSpecialValues(obj);
@@ -90,47 +91,61 @@ describe('Basic usage', function () {
   });
 
   it("should parse two dates in the same string 'once' {{date('start of year', 'YYYY-MM-DD')}} -- {{date('start of month', 'YYYY-MM-DD')}}",
-    function () {
+    () => {
       var obj     = "{{date('start of year', 'YYYY-MM-DD')}} -- {{date('start of month', 'YYYY-MM-DD')}}";
       var testObj = moment().startOf('year').format('YYYY-MM-DD') + ' -- ' + moment().startOf('month').format('YYYY-MM-DD');
       var newObj  = interpolator.interpolateSpecialValues(obj);
       assert(_.isEqual(newObj, testObj));
     });
 
-  it("should parse {{date('-1years', 'start of year', 'YYYY-MM-DD')}}", function () {
+  it("should parse {{date('-1years', 'start of year', 'YYYY-MM-DD')}}", () => {
     var obj     = "{{date('-1years', 'start of year', 'YYYY-MM-DD')}}";
     var testObj = moment().subtract(1, 'year').startOf('year').format('YYYY-MM-DD');
     var newObj  = interpolator.interpolateSpecialValues(obj);
     assert(_.isEqual(newObj, testObj));
   });
 
-  it("should parse {{date('-1years', '-1years', 'start of year', 'YYYY-MM-DD')}}", function () {
+  it("should parse {{date('-1years', '-1years', 'start of year', 'YYYY-MM-DD')}}", () => {
     var obj     = "{{date('-1years', '-1years', 'start of year', 'YYYY-MM-DD')}}";
     var testObj = moment().subtract(2, 'year').startOf('year').format('YYYY-MM-DD');
     var newObj  = interpolator.interpolateSpecialValues(obj);
     assert(_.isEqual(newObj, testObj));
   });
 
-  it("should parse {{date('start of year', '-1years')}}", function () {
+  it("should parse {{date('start of year', '-1years')}}", () => {
     var obj     = "{{date('start of year', '-1years')}}";
     var testObj = moment().startOf('year').subtract(1, 'year').format('YYYY-MM-DD');
     var newObj  = interpolator.interpolateSpecialValues(obj);
     assert(_.isEqual(newObj, testObj));
   });
 
-  it("should return a regular string without changing it", function () {
+  it("should parse {{date('end of year')}}", () => {
+    var obj     = "{{date('end of year')}}";
+    var testObj = moment().endOf('year').format('YYYY-MM-DD');
+    var newObj  = interpolator.interpolateSpecialValues(obj);
+    assert(_.isEqual(newObj, testObj));
+  });
+
+  it("should parse {{date('-1years', 'end of year', 'YYYY-MM-DD HH:mm')}}", () => {
+    var obj     = "{{date('-1years', 'end of year', 'YYYY-MM-DD HH:mm')}}";
+    var testObj = moment().subtract(1, 'year').endOf('year').format('YYYY-MM-DD HH:mm');
+    var newObj  = interpolator.interpolateSpecialValues(obj);
+    assert(_.isEqual(newObj, testObj));
+  });
+
+  it("should return a regular string without changing it", () => {
     var obj     = "2015-01-01";
     var newObj  = interpolator.interpolateSpecialValues(obj);
     assert(_.isEqual(newObj, obj));
   });
 
-  it("should return an object without changing it if no interpolations are given", function () {
+  it("should return an object without changing it if no interpolations are given", () => {
     var obj     = {a:"2015-01-01", b:13, c:true, d:false};
     var newObj  = interpolator.interpolateSpecialValues(obj);
     assert(_.isEqual(newObj, obj));
   });
 
-  it("should return an error with bad input 1", function () {
+  it("should return an error with bad input 1", () => {
     var obj     = "{{date('year,-1,GETDATE()')}}";
     try {
       var newObj = interpolator.interpolateSpecialValues(obj);
@@ -143,7 +158,7 @@ describe('Basic usage', function () {
 
   });
 
-  it("should not throw and error if you pass it something that it can't work with. It should return what you gave it.", function () {
+  it("should not throw and error if you pass it something that it can't work with. It should return what you gave it.", () => {
     var obj      = null;
     try {
       var newObj = interpolator.interpolateSpecialValues(obj);
