@@ -15,8 +15,8 @@ function manipulateDate(date, prompt) {
   //something like '-1years'
   if (addSubTimeRegex.test(prompt)) {
     parts         = addSubTimeRegex.exec(prompt);
-    var direction = parts[1] == '-' ? 'subtract' : 'add';
-    var amount    = parseInt(parts[2], 10);
+    let direction = parts[1] == '-' ? 'subtract' : 'add';
+    let amount    = parseInt(parts[2], 10);
     period        = parts[3];
     return date[direction](amount, period);
   }
@@ -43,23 +43,23 @@ function interpolateSpecialValues(obj) {
   if (!obj) {
     return obj;
   }
-  var objStr  = JSON.stringify(obj);
-  var matches = objStr.match(/\{\{date\([^\}]+\)\}\}/g);
+  let objStr  = JSON.stringify(obj);
+  let matches = objStr.match(/\{\{date\([^\}]+\)\}\}/g);
 
   //do this forEach {{date(...)}} that we find
   _.each(matches, (preInterpolatedStr) => {
 
-    var parts            = /\{\{date\(([^\)]+)\)\}\}/.exec(objStr);
+    let parts            = /\{\{date\(([^\)]+)\)\}\}/.exec(objStr);
 
     if(!parts) {
       throw new Error('Bad Object Interpolation Input');
     }
-    var insideDateParens = parts[1];
-    var momentPrompts    = _.map(insideDateParens.split(','), (momentPrompt) => {
+    let insideDateParens = parts[1];
+    let momentPrompts    = _.map(insideDateParens.split(','), (momentPrompt) => {
       return _.trim(momentPrompt, " '");
     });
 
-    var date = moment();
+    let date = moment();
     _.each(momentPrompts, (prompt) => {
       date = manipulateDate(date, prompt);
       //once we hit the format prompt, we'll break out of the prompts. So format prompt needs to be last
