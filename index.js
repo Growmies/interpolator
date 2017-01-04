@@ -1,15 +1,16 @@
-var moment = require('moment');
-var _      = require('lodash');
+const moment = require('moment');
+const _      = require('lodash');
 
 module.exports = {
   interpolateSpecialValues: interpolateSpecialValues
 };
 
 function manipulateDate(date, prompt) {
-  var parts;
-  var period;
-  var addSubTimeRegex  = /([-+])(\d+)(seconds|minutes|hours|days|weeks|months|years)/;
-  var startOfTimeRegex = /start of (year|month|quarter|week|isoWeek|day|hour|minute|second)/;
+  const startOfTimeRegex = /start of (year|month|quarter|week|isoWeek|day|hour|minute|second)/;
+  const endOfTimeRegex = /end of (year|month|quarter|week|isoWeek|day|hour|minute|second)/;
+  const addSubTimeRegex  = /([-+])(\d+)(seconds|minutes|hours|days|weeks|months|years)/;
+  let parts;
+  let period;
 
   //something like '-1years'
   if (addSubTimeRegex.test(prompt)) {
@@ -27,6 +28,13 @@ function manipulateDate(date, prompt) {
     return date.startOf(period);
   }
 
+  //something like 'end of year'
+  if (endOfTimeRegex.test(prompt)) {
+    parts  = endOfTimeRegex.exec(prompt);
+    period = parts[1];
+    return date.endOf(period);
+  }
+
   //if we get here, we assume we have a format string like 'YYYY-MM-DD'
   return date.format(prompt);
 }
@@ -39,7 +47,7 @@ function interpolateSpecialValues(obj) {
   var matches = objStr.match(/\{\{date\([^\}]+\)\}\}/g);
 
   //do this forEach {{date(...)}} that we find
-  _.each(matches, function (preInterpolatedStr) {
+  _.each(matches, (preInterpolatedStr) => {
 
     var parts            = /\{\{date\(([^\)]+)\)\}\}/.exec(objStr);
 
@@ -47,12 +55,12 @@ function interpolateSpecialValues(obj) {
       throw new Error('Bad Object Interpolation Input');
     }
     var insideDateParens = parts[1];
-    var momentPrompts    = _.map(insideDateParens.split(','), function (momentPrompt) {
+    var momentPrompts    = _.map(insideDateParens.split(','), (momentPrompt) => {
       return _.trim(momentPrompt, " '");
     });
 
     var date = moment();
-    _.each(momentPrompts, function (prompt) {
+    _.each(momentPrompts, (prompt) => {
       date = manipulateDate(date, prompt);
       //once we hit the format prompt, we'll break out of the prompts. So format prompt needs to be last
       if (_.isString(date)) {
