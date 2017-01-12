@@ -1,3 +1,6 @@
+#***********NOTE TO MAINTAINERS @ GROW!!!!**********************
+##We have our own copy of object-interpolator inside grow-isomorphic which we have to use because of special logic in certain shared files within grow-isomorphic. If you want changes to take place in Grow-app, go write them in grow-isomorphic
+
 object-interpolator takes an object and replaces date tokens with date formats
 
 ##Install
